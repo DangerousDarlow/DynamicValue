@@ -34,6 +34,8 @@ public class DynamicValues : IDynamicValues
 
     public void Set(DynamicValueId id, DynamicValue value) => Set(id, id.Value, value);
 
+    public void Set(DynamicValueId id, bool enabled) => Set(id, id.Value, enabled);
+
     public void Set(DynamicValueId id, Guid context, DynamicValue value) => _values.AddOrUpdate(
         id,
         _ => new() { [id.Value] = value },
@@ -46,8 +48,6 @@ public class DynamicValues : IDynamicValues
 
             return valuesForId;
         });
-
-    public void Set(DynamicValueId id, bool enabled) => Set(id, id.Value, enabled);
 
     public void Set(DynamicValueId id, Guid context, bool enabled) => Set(id, context, new DynamicValue(enabled, null));
 }
