@@ -16,13 +16,7 @@ public class DynamicValues : IDynamicValues
         return valuesForId.GetValueOrDefault(id.Value, Default);
     }
 
-    public bool IsEnabled(DynamicValueId id)
-    {
-        if (_values.TryGetValue(id, out var valuesForId) is false)
-            return false;
-
-        return valuesForId.TryGetValue(id.Value, out var valueForIdAndDefault) && valueForIdAndDefault.Enabled;
-    }
+    public bool IsEnabled(DynamicValueId id) => Get(id).Enabled;
 
     public DynamicValue Get(DynamicValueId id, IEnumerable<Guid> context)
     {
@@ -36,17 +30,7 @@ public class DynamicValues : IDynamicValues
         return valuesForId.GetValueOrDefault(id.Value, Default);
     }
 
-    public bool IsEnabled(DynamicValueId id, IEnumerable<Guid> context)
-    {
-        if (_values.TryGetValue(id, out var valuesForId) is false)
-            return false;
-
-        foreach (var contextId in context)
-            if (valuesForId.TryGetValue(contextId, out var valueForIdAndContext))
-                return valueForIdAndContext.Enabled;
-
-        return valuesForId.TryGetValue(id.Value, out var valueForIdAndDefault) && valueForIdAndDefault.Enabled;
-    }
+    public bool IsEnabled(DynamicValueId id, IEnumerable<Guid> context) => Get(id, context).Enabled;
 
     public void Set(DynamicValueId id, DynamicValue value) => Set(id, id.Value, value);
 
@@ -65,16 +49,5 @@ public class DynamicValues : IDynamicValues
 
     public void Set(DynamicValueId id, bool enabled) => Set(id, id.Value, enabled);
 
-    public void Set(DynamicValueId id, Guid context, bool enabled) => _values.AddOrUpdate(
-        id,
-        _ => new() { [id.Value] = new(enabled, null) },
-        (_, valuesForId) =>
-        {
-            valuesForId.AddOrUpdate(
-                context,
-                _ => new(enabled, null),
-                (_, existing) => existing with { Enabled = enabled });
-
-            return valuesForId;
-        });
+    public void Set(DynamicValueId id, Guid context, bool enabled) => Set(id, context, new DynamicValue(enabled, null));
 }
