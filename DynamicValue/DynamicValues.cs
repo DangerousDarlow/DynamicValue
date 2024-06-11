@@ -4,9 +4,9 @@ namespace DynamicValue;
 
 public class DynamicValues : IDynamicValues
 {
-    private readonly ConcurrentDictionary<DynamicValueId, ConcurrentDictionary<Guid, DynamicValue>> _values = new();
-
     public static readonly DynamicValue Default = new(false, null);
+
+    private readonly ConcurrentDictionary<DynamicValueId, ConcurrentDictionary<Guid, DynamicValue>> _values = new();
 
     public DynamicValue Get(DynamicValueId id)
     {
@@ -30,10 +30,8 @@ public class DynamicValues : IDynamicValues
             return Default;
 
         foreach (var contextId in context)
-        {
             if (valuesForId.TryGetValue(contextId, out var valueForIdAndContext))
                 return valueForIdAndContext;
-        }
 
         return valuesForId.GetValueOrDefault(id.Value, Default);
     }
@@ -44,10 +42,8 @@ public class DynamicValues : IDynamicValues
             return false;
 
         foreach (var contextId in context)
-        {
             if (valuesForId.TryGetValue(contextId, out var valueForIdAndContext))
                 return valueForIdAndContext.Enabled;
-        }
 
         return valuesForId.TryGetValue(id.Value, out var valueForIdAndDefault) && valueForIdAndDefault.Enabled;
     }
