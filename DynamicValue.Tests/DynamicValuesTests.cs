@@ -5,13 +5,11 @@ public class DynamicValuesTests
     private readonly Guid _context = Guid.Parse("e35ede8f-a931-494b-bf07-ab67b1b2b744");
 
     private readonly DynamicValueId _id = Guid.Parse("673c44c5-1291-46e1-a193-2d3db8d84cd6").ToDynamicValueId();
+
     private DynamicValues _dynamicValues;
 
     [SetUp]
-    public void Setup()
-    {
-        _dynamicValues = new();
-    }
+    public void Setup() => _dynamicValues = new DynamicValues();
 
     [Test]
     public void Dynamic_value_for_unknown_id_is_default()
