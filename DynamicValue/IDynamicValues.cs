@@ -6,7 +6,7 @@ public interface IDynamicValues
 
     bool IsEnabled(DynamicValueId id);
 
-    DynamicValue Get(DynamicValueId id, IEnumerable<Guid> context);
+    DynamicValue Get(DynamicValueId id, ReadOnlySpan<Guid> context);
 
-    bool IsEnabled(DynamicValueId id, IEnumerable<Guid> context);
+    bool IsEnabled(DynamicValueId id, ReadOnlySpan<Guid> context);
 }

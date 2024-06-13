@@ -18,7 +18,7 @@ public class DynamicValues : IDynamicValues
 
     public bool IsEnabled(DynamicValueId id) => Get(id).Enabled;
 
-    public DynamicValue Get(DynamicValueId id, IEnumerable<Guid> context)
+    public DynamicValue Get(DynamicValueId id, ReadOnlySpan<Guid> context)
     {
         if (_values.TryGetValue(id, out var valuesForId) is false)
             return Default;
@@ -30,7 +30,7 @@ public class DynamicValues : IDynamicValues
         return valuesForId.GetValueOrDefault(id.Value, Default);
     }
 
-    public bool IsEnabled(DynamicValueId id, IEnumerable<Guid> context) => Get(id, context).Enabled;
+    public bool IsEnabled(DynamicValueId id, ReadOnlySpan<Guid> context) => Get(id, context).Enabled;
 
     public void Set(DynamicValueId id, DynamicValue value) => Set(id, id.Value, value);
 
